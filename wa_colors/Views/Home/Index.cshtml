@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<header class="mb-auto">
+    <div>
+        <h3 class="float-md-start mb-4">Selección de color</h3>
+    </div>
+</header>
+
+<div class="alert alert-success fade show" role="alert" hidden>
+    <button type="button" class="close" id="alert-close"><span aria-hidden="true">&times;</span></button>
+    <p class="m-0" id="alert-text"></p>
+</div>
+
+<div class="row">
+    @foreach (var c in ViewData["listColors"] as List<wa_colors.Models.viewData>)
+    {
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="row no-gutters border overflow-hidden flex-row mb-4 shadow-sm h-md-50 position-relative color" data-color="@c.code">
+                <div class="col-auto p-4 d-flex flex-column position-static text-left w-100">
+                    <h4 class="mb-0 text-capitalize">@c.name</h4>
+                    <div class="mb-1 text-muted">@c.year</div>
+                    <p class="card-text mb-auto text-right">@c.code</p>
+                    <p class="card-text mb-auto text-right">@c.pantone</p>
+                </div>
+                <div class="col-auto w-100 h-50">
+                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="@c.code"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em"></text></svg>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<footer class="mt-auto text-white-50">
+    <a href="@Url.Action("setPage", "Home", new { page = (ViewBag.curr_page - 1) })" class="btn btn-secondary float-left  @ViewBag.prev_page">Anterior</a>
+    <a href="@Url.Action("setPage", "Home", new { page = (ViewBag.curr_page + 1) })" class="btn btn-secondary float-right @ViewBag.next_page">Siguiente</a>
+</footer>
+
+<script>
+    $('.color').on('click', function () {
+        var color = $(this).attr('data-color');
+        $('#alert-text').empty();
+        $('#alert-text').text('Fue copiado el color: ' + color + ', en tu portapapeles.');
+        $('.alert').prop('hidden', false);
+
+        var clipboard = $('<input>').val(color).appendTo('body').select(); 
+        document.execCommand('copy');
+        clipboard.remove();
+    });
+
+    $('#alert-close').on('click', function () {
+        $('.alert').prop('hidden', true);
+    })
+</script>
